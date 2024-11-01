@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static "blog/main.css" %}"
+    <link rel="stylesheet" type="text/css" href="{% static "blog/main.css" %}">
     {%if title%}
     <title>Old Style Twitter- {{title}}</title>
     {%else%}
@@ -28,6 +28,10 @@
                 <li><a href="">Home</a></li>
                 <li><a href="">About</a></li>
                 <li><a href="">Profile</a></li>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <li><button type="submit" class="btn btn-outline-light">Logout</button></li>
+                </form>
             </ul>
         </nav>
     </header>
@@ -35,14 +39,15 @@
     <!-- Main Content Area -->
     <div class="container content-wrapper">
         <!-- Profile Sidebar (if needed) -->
-        <aside class="profile-section">
-            <img src="profile.jpg" alt="Profile Picture">
-            <h2>@username</h2>
-            <p>Bio: Just tweeting about life!</p>
-        </aside>
+        
 
         <!-- Main Content Block -->
         <div class="container">
+            {% if messages%}
+            {%for message in messages%}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>
+            {%endfor%}
+            {%endif%}
             {% block content %}
             <!-- Page-specific content goes here -->
             {% endblock %}
